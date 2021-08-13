@@ -26,7 +26,7 @@ body { height: 100vh; background: var(--dark-grey) }
 
 /*
  ROOT */
-#root { height: inherit; min-width: 100%; display: flex }
+#root { height: inherit; display: flex }
 
 /* BOARD */
 .board {
@@ -75,7 +75,6 @@ body { height: 100vh; background: var(--dark-grey) }
   background: var(--dark-grey);
   border-radius: inherit
 }
-.card__face--front { filter: gra }
 .card__face--back { transform: rotateY(-180deg) }
 .board__card--flipped { transform: rotateY(180deg) }
 
