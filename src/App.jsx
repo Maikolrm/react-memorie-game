@@ -1,12 +1,6 @@
-import React, { useState, useEffect, useContext, useReducer } from 'react'
-import { useImmerReducer } from 'use-immer'
+import React, { useState, useEffect } from 'react'
 import './App.css'
-// CONTEXT
-import StateContext from './StateContext'
-import DispatchContext from './DispatchContext'
-
-// COMPONENTS
-import { BoardCards } from './components'
+import { Card } from './components'
 
 function App() {
   const cards = [
@@ -17,40 +11,30 @@ function App() {
     {id: 5, framework: 'react.svg' },
     {id: 6, framework: 'vue.svg' },
   ]
+  const [matches, setMatches] = useState([])
   const [isLocked, setIsLocked] = useState(false)
-  const initialState = {
-    points: 0,
-    matches: []
+  const unFlipCards = () => {
+    setTimeout(() => {
+      matches.map(card => card.setFlipped(false), 500) // Unflip cards
+      setIsLocked(false)
+    }, 500)
+    setMatches([])
   }
-  const reducer = (draft, action) => {
-    switch (action.type) {
-      case 'handle-card':
-        draft.matches.push(action.card)
-        break
-      case 'handle-match':
-        setIsLocked(true)
-        const matches = action.matches
-        const match = matches[0].id === matches[1].id
-        if (!match) setTimeout(() => {
-          matches.map(card => card.setFlipped(false))
-          setIsLocked(false)
-        }, 500)
-        draft.matches = []
-    }
+  const handelMatches = () => {
+    setIsLocked(true)
+    const match = matches[0].id === matches[1].id
+    if (!match) return unFlipCards()
+    setIsLocked(false)
+    setMatches([])
   }
-  const [state, dispatch] = useImmerReducer(reducer, initialState)
   useEffect(() => {
-    if(state.matches.length && state.matches.length === 2) dispatch({type: 'handle-match', matches: state.matches })
-  }, [state.matches])
+    if (matches.length && matches.length === 2) handelMatches()
+  }, [matches])
   return (
-    <StateContext.Provider value={state}>
-      <DispatchContext.Provider value={dispatch}>
-        <div className="board">
-          {isLocked ? <div className="board__hover"></div> : ''}
-          <BoardCards cards={[...cards, ...cards]} />
-        </div>
-      </DispatchContext.Provider>
-    </StateContext.Provider>
+    <div className="board">
+      {isLocked ? <div className="board__hover"></div> : ''}
+      {[...cards, ...cards].map((card, i) => <Card key={i} card={card} setMatches={setMatches} />)}
+    </div>
   )
 }
 
