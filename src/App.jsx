@@ -13,7 +13,7 @@ function App() {
   ])
   const [matches, setMatches] = useState([])
   const [isLocked, setIsLocked] = useState(false)
-  const handleFlippedCards = (action) => {
+  const unflipCards = (action) => {
     action === 'un-flip' ? setTimeout(() => {
       matches.map(card => card.setFlipped(false))
       setIsLocked(false)
@@ -23,7 +23,7 @@ function App() {
   const handelMatches = () => {
     setIsLocked(true)
     const match = matches[0].id === matches[1].id
-    !match ? handleFlippedCards('un-flip') : handleFlippedCards('none')
+    !match ? unflipCards('un-flip') : unflipCards('none')
   }
   useEffect(() => {
     if (matches.length && matches.length === 2) handelMatches()
