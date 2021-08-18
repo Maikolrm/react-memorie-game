@@ -14,9 +14,9 @@ function App() {
   const [flippedCards, setFlippedCards] = useState([])
   const [matches, setMatches] = useState([])
   const [isLocked, setIsLocked] = useState(false)
-  const unflipCards = (cards) => {
-    cards === 'all' ? setTimeout(() => {
-      matches.map(card => card.setFlipped(false))
+  const handleCards = (action, cards) => {
+    action === 'unflip-cards' ? setTimeout(() => {
+      cards.map(card => card.setFlipped(false))
       setIsLocked(false)
     }, 500) : setIsLocked(false)
     setMatches([])
@@ -24,7 +24,7 @@ function App() {
   const handelMatches = () => {
     setIsLocked(true)
     const match = matches[0].id === matches[1].id
-    !match ? unflipCards('all') : unflipCards('none')
+    !match ? handleCards('unflip-cards', matches) : handleCards('none')
     if (match && !flippedCards.find(el => el.id === matches[0].id)) setFlippedCards(prev => prev.concat(matches))
   }
   useEffect(() => {
@@ -32,6 +32,10 @@ function App() {
   }, [matches])
   useEffect(() => {
     console.log(flippedCards)
+    if (flippedCards.length === (cards.length * 2)) {
+      handleCards('unflip-cards', flippedCards)
+      setFlippedCards([])
+    }
   }, [flippedCards])
   return (
     <div className="board">
