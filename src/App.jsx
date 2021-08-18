@@ -3,14 +3,14 @@ import './App.css'
 import { Card } from './components'
 
 function App() {
-  const cards = [
+  const [cards, setCards] = useState([
     {id: 1, framework: 'angular.svg' },
     {id: 2, framework: 'aurelia.svg' },
     {id: 3, framework: 'backbone.svg' },
     {id: 4, framework: 'ember.svg' },
     {id: 5, framework: 'react.svg' },
     {id: 6, framework: 'vue.svg' },
-  ]
+  ])
   const [matches, setMatches] = useState([])
   const [isLocked, setIsLocked] = useState(false)
   const handleFlippedCards = (action) => {
