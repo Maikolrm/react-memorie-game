@@ -16,21 +16,21 @@ function App() {
   const [isLocked, setIsLocked] = useState(false)
   const [completed, setCompleted] = useState(false)
   const [resetGame, setResetGame] = useState(false)
-  const handleCards = (action, cards) => {
+  const handleCards = (action, cards, delay) => {
     action === 'unflip-cards' ? setTimeout(() => {
       cards.map(card => card.setFlipped(false))
       setIsLocked(false)
-    }, 500) : setIsLocked(false)
+    }, delay) : setIsLocked(false)
     setMatches([])
   }
   const handelMatches = () => {
     setIsLocked(true)
     const match = matches[0].id === matches[1].id
-    !match ? handleCards('unflip-cards', matches) : handleCards('none')
+    !match ? handleCards('unflip-cards', matches, 500) : handleCards('none')
     if (match && !flippedCards.find(el => el.id === matches[0].id)) setFlippedCards(prev => prev.concat(matches))
   }
   const handleReset = () => {
-    handleCards('unflip-cards', flippedCards)
+    handleCards('unflip-cards', flippedCards, 0)
     setFlippedCards([])
     setResetGame(false)
     setCompleted(false)
