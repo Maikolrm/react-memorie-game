@@ -15,6 +15,7 @@ function App() {
   const [matches, setMatches] = useState([])
   const [isLocked, setIsLocked] = useState(false)
   const [completed, setCompleted] = useState(false)
+  const [resetGame, setResetGame] = useState(false)
   const handleCards = (action, cards) => {
     action === 'unflip-cards' ? setTimeout(() => {
       cards.map(card => card.setFlipped(false))
@@ -28,20 +29,24 @@ function App() {
     !match ? handleCards('unflip-cards', matches) : handleCards('none')
     if (match && !flippedCards.find(el => el.id === matches[0].id)) setFlippedCards(prev => prev.concat(matches))
   }
+  const handleReset = () => {
+    handleCards('unflip-cards', flippedCards)
+    setFlippedCards([])
+    setResetGame(false)
+    setCompleted(false)
+  }
   useEffect(() => {
     if (matches.length && matches.length === 2) handelMatches()
   }, [matches])
   useEffect(() => {
-    console.log(flippedCards)
-    if (flippedCards.length === (cards.length * 2)) {
-      handleCards('unflip-cards', flippedCards)
-      setFlippedCards([])
-      setCompleted(true)
-    }
+    if (flippedCards.length === (cards.length * 2)) setCompleted(true)
   }, [flippedCards])
+  useEffect(() => {
+    if (resetGame) handleReset()
+  }, [resetGame])
   return (
     <>
-      {completed ? <Modal /> : ''}
+      {completed ? <Modal setResetGame={setResetGame} /> : ''}
       <div className="board">
         {isLocked ? <div className="board__hover"></div> : ''}
         {[...cards, ...cards].map((card, i) => <Card key={i} card={card} setMatches={setMatches} />)}
