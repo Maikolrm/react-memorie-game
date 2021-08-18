@@ -11,6 +11,7 @@ function App() {
     {id: 5, framework: 'react.svg' },
     {id: 6, framework: 'vue.svg' },
   ])
+  const [flippedCards, setFlippedCards] = useState([])
   const [matches, setMatches] = useState([])
   const [isLocked, setIsLocked] = useState(false)
   const unflipCards = (cards) => {
@@ -24,10 +25,14 @@ function App() {
     setIsLocked(true)
     const match = matches[0].id === matches[1].id
     !match ? unflipCards('all') : unflipCards('none')
+    if (match && !flippedCards.find(el => el.id === matches[0].id)) setFlippedCards(prev => prev.concat(matches))
   }
   useEffect(() => {
     if (matches.length && matches.length === 2) handelMatches()
   }, [matches])
+  useEffect(() => {
+    console.log(flippedCards)
+  }, [flippedCards])
   return (
     <div className="board">
       {isLocked ? <div className="board__hover"></div> : ''}
