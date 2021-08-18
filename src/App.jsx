@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
-import { Card } from './components'
+import { Card, Modal } from './components'
 
 function App() {
   const [cards, setCards] = useState([
@@ -14,6 +14,7 @@ function App() {
   const [flippedCards, setFlippedCards] = useState([])
   const [matches, setMatches] = useState([])
   const [isLocked, setIsLocked] = useState(false)
+  const [completed, setCompleted] = useState(false)
   const handleCards = (action, cards) => {
     action === 'unflip-cards' ? setTimeout(() => {
       cards.map(card => card.setFlipped(false))
@@ -35,13 +36,17 @@ function App() {
     if (flippedCards.length === (cards.length * 2)) {
       handleCards('unflip-cards', flippedCards)
       setFlippedCards([])
+      setCompleted(true)
     }
   }, [flippedCards])
   return (
-    <div className="board">
-      {isLocked ? <div className="board__hover"></div> : ''}
-      {[...cards, ...cards].map((card, i) => <Card key={i} card={card} setMatches={setMatches} />)}
-    </div>
+    <>
+      {completed ? <Modal /> : ''}
+      <div className="board">
+        {isLocked ? <div className="board__hover"></div> : ''}
+        {[...cards, ...cards].map((card, i) => <Card key={i} card={card} setMatches={setMatches} />)}
+      </div>
+    </>
   )
 }
 
