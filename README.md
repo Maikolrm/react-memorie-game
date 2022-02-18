@@ -1,4 +1,4 @@
-## React Memory Game
+## React Memorie Game
 
 #### What this app can do?
 
